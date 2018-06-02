@@ -15,14 +15,13 @@ def main():
     f = open('./Taiwan_long_17_1_clean_hashtags.csv', 'r')
     reader_url = csv.reader(f)
     # data = list(itertools.islice(reader_url, 1, 501))
-    data = list(reader_url)
+    data = list(reader_url) # Why using list(): Let tqdm knows the length.
     print("tags count: ", len(data))
 
     # Detect language of each line
     # for row in reader_url:
     for row in tqdm(data):
         language = langid.classify(row[5])
-        # print(row[0], row[5], language[0])
         for i in range(5):
             if language[0] == lang[i]:
                 hashtag_list[i].append(row[5])
@@ -32,7 +31,6 @@ def main():
 
     # Write csv files
     for i in range(5):
-        # print("%s hashtags:" % lang[i], hashtag_list[i])
         print("%s hashtags:" % lang[i])
         write_csv_file(hashtag_list[i], lang[i])
 
@@ -43,7 +41,6 @@ def write_csv_file(hashtags, language):
         writer = csv.writer(g)
         for text in tqdm(hashtags):
             writer.writerows([[text]])
-            # time.sleep(0.001)
     g.close()
 
 if __name__ == '__main__':
